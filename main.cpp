@@ -12,7 +12,7 @@ int main()
 {
     try
     {
-        SerialHandler serial("/dev/ttyUSB0", LibSerial::BaudRate::BAUD_921600);
+        SerialHandler serial("/dev/ttyUSB0", LibSerial::BaudRate::BAUD_115200);
         XbusPacket packet;
 
         std::vector<uint8_t> goToConfig = {0xFA, 0xFF, 0x30, 0x00};
