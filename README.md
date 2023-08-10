@@ -5,10 +5,12 @@ Tested on ubuntu 20.04 with MTi-3-DK, and MTi-680G.
 
 Install the dependency libary
 
-ubuntu
+ubuntu 20
 ```
 sudo apt install libserial-dev
 ```
+note: for ubuntu 18, you need to build from source following [this instruction](https://github.com/crayzeewulf/libserial#developers)
+
 then
 ```
 make
