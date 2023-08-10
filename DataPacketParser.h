@@ -32,6 +32,9 @@ struct Xbus {
     float mag[3];
     bool magAvailable = false;
 
+    uint16_t packetCounter;
+    bool packetCounterAvailable = false;
+
     uint32_t sampleTimeFine;
     bool sampleTimeFineAvailable = false;
 
