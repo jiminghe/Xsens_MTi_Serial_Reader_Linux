@@ -1,7 +1,7 @@
 # Xsens_MTi_Serial_Reader_Linux
 Use C++ Serial library([libserial](https://github.com/crayzeewulf/libserial)) to config/read data from Xsens MTi.
 
-Tested on ubuntu 20.04 with MTi-3-DK.
+Tested on ubuntu 20.04 with MTi-3-DK, and MTi-680G.
 
 Install the dependency libary
 
