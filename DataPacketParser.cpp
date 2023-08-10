@@ -33,14 +33,12 @@ void DataPacketParser::parseDataPacket(const std::vector<uint8_t> &packet, Xbus 
 
 void DataPacketParser::dataswapendian(uint8_t *data, int len)
 {
-    uint8_t cpy[len];
-    memcpy(cpy, data, len);
-    for (int i = 0; i < len / 4; i++)
+    int i = 0, j = len - 1;
+    while(i < j)
     {
-        for (int j = 0; j < 4; j++)
-        {
-            data[j + i * 4] = cpy[3 - j + i * 4];
-        }
+        std::swap(data[i], data[j]);
+        i++;
+        j--;
     }
 }
 
