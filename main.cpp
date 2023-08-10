@@ -12,7 +12,7 @@ int main()
 {
     try
     {
-        SerialHandler serial("/dev/ttyUSB0", LibSerial::BaudRate::BAUD_115200); //Change this to your port name and baudrate(which could be configured at MT Manager - Device Settings)
+        SerialHandler serial("/dev/ttyUSB0", LibSerial::BaudRate::BAUD_115200);//Change this to your port name and baudrate(which could be configured at MT Manager - Device Settings)
         XbusPacket packet;
 
         std::vector<uint8_t> goToConfig = {0xFA, 0xFF, 0x30, 0x00};
@@ -37,6 +37,10 @@ int main()
                     // Create an instance of the Xbus struct
                     DataPacketParser::parseDataPacket(rawData, xbusData); // Parse the raw packet data
 
+                    if(xbusData.packetCounterAvailable)
+                    {
+                        printf("packetCounter: %u, ", xbusData.packetCounter);
+                    }
 
                     if (xbusData.sampleTimeFineAvailable)
                     {
