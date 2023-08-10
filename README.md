@@ -7,6 +7,7 @@ Install the dependency libary
 
 ubuntu 20
 ```
+sudo apt update
 sudo apt install libserial-dev
 ```
 note: for ubuntu 18, you need to build from source following [this instruction](https://github.com/crayzeewulf/libserial#developers)
