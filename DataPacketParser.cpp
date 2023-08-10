@@ -74,6 +74,12 @@ void DataPacketParser::parseMTData2(Xbus *self, uint8_t *data, uint8_t datalengt
 
         switch (dataId)
         {
+        case 0x1020:
+            dataswapendian(&data[offset], 2);
+            self->packetCounter = *reinterpret_cast<uint16_t *>(&data[offset]);
+            self->packetCounterAvailable = true;
+            offset += 2;
+            break;
         case 0x1060: // Sample time fine
             dataswapendian(&data[offset], 4);
             self->sampleTimeFine = *reinterpret_cast<uint32_t *>(&data[offset]);
