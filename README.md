@@ -14,6 +14,11 @@ then
 make
 ```
 
+change the port and baudrate in the main.cpp to your setup:
+```
+SerialHandler serial("/dev/ttyUSB0", LibSerial::BaudRate::BAUD_115200);
+```
+
 run the program:
 ```
 ./mti_serial
