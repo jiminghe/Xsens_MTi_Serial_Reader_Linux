@@ -8,7 +8,7 @@ SRC = $(wildcard *.cpp)
 CC = g++
 
 # Compiler flags
-CFLAGS = -Wall
+CFLAGS = -Wall -include cstddef
 
 # Libraries to link against
 LIBS = -lserial

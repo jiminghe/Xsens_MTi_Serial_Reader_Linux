@@ -80,7 +80,7 @@ public:
     static void parseDataPacket(const std::vector<uint8_t>& packet, Xbus& xbusData);
 
 private:
-    static void dataswapendian(uint8_t* data, int len);
+    static void dataswapendian(uint8_t *data, int len, int chunk_size);
     static void parseMTData2(Xbus* self, uint8_t* data, uint8_t datalength);
     static double parseFP1632(const uint8_t* data);
 };

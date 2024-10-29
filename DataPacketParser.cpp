@@ -31,16 +31,25 @@ void DataPacketParser::parseDataPacket(const std::vector<uint8_t> &packet, Xbus 
     }
 }
 
-void DataPacketParser::dataswapendian(uint8_t *data, int len)
+void DataPacketParser::dataswapendian(uint8_t *data, int len, int chunk_size)
 {
-    int i = 0, j = len - 1;
-    while(i < j)
+    // Check that the length is a multiple of the chunk size to avoid incomplete chunks
+    if (len % chunk_size != 0) return;
+
+    // Swap bytes within each chunk
+    for (int i = 0; i < len; i += chunk_size)
     {
-        std::swap(data[i], data[j]);
-        i++;
-        j--;
+        if (chunk_size == 4) {
+            // Swap for 4-byte chunk (e.g., float)
+            std::swap(data[i], data[i + 3]);
+            std::swap(data[i + 1], data[i + 2]);
+        } else if (chunk_size == 2) {
+            // Swap for 2-byte chunk (e.g., 16-bit integer)
+            std::swap(data[i], data[i + 1]);
+        }
     }
 }
+
 
 double DataPacketParser::parseFP1632(const uint8_t *data)
 {
@@ -73,24 +82,24 @@ void DataPacketParser::parseMTData2(Xbus *self, uint8_t *data, uint8_t datalengt
         switch (dataId)
         {
         case 0x1020:
-            dataswapendian(&data[offset], 2);
+            dataswapendian(&data[offset], 2, 2);
             self->packetCounter = *reinterpret_cast<uint16_t *>(&data[offset]);
             self->packetCounterAvailable = true;
             offset += 2;
             break;
         case 0x1060: // Sample time fine
-            dataswapendian(&data[offset], 4);
+            dataswapendian(&data[offset], 4, 4);
             self->sampleTimeFine = *reinterpret_cast<uint32_t *>(&data[offset]);
             self->sampleTimeFineAvailable = true;
             offset += 4;
             break;
         case 0x1010: // UTC Time stamp
         {
-            dataswapendian(&data[offset], 4);
+            dataswapendian(&data[offset], 4, 4);
             uint32_t nanosec = *reinterpret_cast<uint32_t *>(&data[offset]);
             offset += 4;
 
-            dataswapendian(&data[offset], 2);
+            dataswapendian(&data[offset], 2, 2);
             uint16_t year = *reinterpret_cast<uint16_t *>(&data[offset]);
             offset += 2;
 
@@ -123,27 +132,27 @@ void DataPacketParser::parseMTData2(Xbus *self, uint8_t *data, uint8_t datalengt
             break;
         }
         case 0x2030: // Euler Angles
-            dataswapendian(&data[offset], 12);
+            dataswapendian(&data[offset], 12, 4);
             memcpy(self->euler, &data[offset], 12);
             self->eulerAvailable = true;
             offset += 12;
             break;
         case 0x2010: // Quaternion.
-            dataswapendian(&data[offset], 16);
+            dataswapendian(&data[offset], 16, 4);
             memcpy(self->quat, &data[offset], 16);
             self->quaternionAvailable = true;
             self->convertQuatToEuler();
             offset += 16;
             break;
         case 0x4020: // Acceleration
-            dataswapendian(&data[offset], 12);
+            dataswapendian(&data[offset], 12, 4);
             memcpy(self->acc, &data[offset], 12);
             self->accAvailable = true;
             offset += 12;
             break;
 
         case 0x8020: // Rate of Turn
-            dataswapendian(&data[offset], 12);
+            dataswapendian(&data[offset], 12, 4);
             memcpy(self->rot, &data[offset], 12);
             self->rotAvailable = true;
             offset += 12;
@@ -162,7 +171,7 @@ void DataPacketParser::parseMTData2(Xbus *self, uint8_t *data, uint8_t datalengt
             offset += 6;
             break;
         case 0xC020: // Magnetic Field
-            dataswapendian(&data[offset], 12);
+            dataswapendian(&data[offset], 12, 4);
             memcpy(self->mag, &data[offset], 12);
             self->magAvailable = true;
             offset += 12;
